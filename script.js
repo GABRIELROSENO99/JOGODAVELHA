@@ -1,4 +1,3 @@
-const board = document.getElementById('board');
 const cells = document.querySelectorAll('.cell');
 const statusDisplay = document.getElementById('status');
 const resetButton = document.getElementById('reset-button');
@@ -13,8 +12,8 @@ let currentPlayer = 'X';
 let gameState = ["", "", "", "", "", "", "", "", ""]; // Representa o tabuleiro
 let scoreX = 0;
 let scoreO = 0;
-let currentSymbolX = 'X';
-let currentSymbolO = 'O';
+let currentSymbolX = 'X'; // Pode ser 'X' ou '▲'
+let currentSymbolO = 'O'; // Pode ser 'O' ou '♥'
 
 // Combinações de vitória (índices das células)
 const winningConditions = [
@@ -25,31 +24,36 @@ const winningConditions = [
 
 // --- Funções de Lógica do Jogo ---
 
-// Função principal chamada ao clicar em uma célula
 function handleCellClick(clickedCellEvent) {
     const clickedCell = clickedCellEvent.target;
     const clickedCellIndex = parseInt(clickedCell.getAttribute('data-index'));
 
-    // Verifica se a jogada é válida e o jogo está ativo
     if (gameState[clickedCellIndex] !== "" || !gameActive) {
         return;
     }
 
-    // Processa a jogada
     handlePlay(clickedCell, clickedCellIndex);
     handleResultValidation();
 }
 
-// Atualiza o estado do jogo e a interface
 function handlePlay(clickedCell, clickedCellIndex) {
     const symbol = currentPlayer === 'X' ? currentSymbolX : currentSymbolO;
     
     gameState[clickedCellIndex] = currentPlayer;
     clickedCell.innerHTML = symbol;
-    clickedCell.style.color = currentPlayer === 'X' ? 'blue' : 'red'; // Cores fixas para os símbolos
+    
+    // Define a cor de exibição do símbolo
+    if (currentPlayer === 'X') {
+        clickedCell.style.color = '#00bcd4'; // Cor para X/Triângulo (Dark Mode Primary)
+        // Se o símbolo for '▲' (Triângulo) e o background for escuro, o azul pode ficar melhor
+        if (currentSymbolX === '▲') {
+             clickedCell.style.color = '#4caf50'; // Ex: um verde para diferenciar
+        }
+    } else {
+        clickedCell.style.color = '#ff9800'; // Cor para O/Coração (Dark Mode Accent)
+    }
 }
 
-// Verifica se há um vencedor ou empate
 function handleResultValidation() {
     let roundWon = false;
     for (let i = 0; i < winningConditions.length; i++) {
@@ -59,7 +63,7 @@ function handleResultValidation() {
         let c = gameState[winCondition[2]];
 
         if (a === '' || b === '' || c === '') {
-            continue; // Próxima condição
+            continue;
         }
         if (a === b && b === c) {
             roundWon = true;
@@ -69,10 +73,21 @@ function handleResultValidation() {
 
     if (roundWon) {
         let winMessage;
+        
         if (currentPlayer === 'X') {
-            winMessage = `🎉 Vitória do Símbolo X! O almoço será por conta do Gui !!!`;
+            // Verifica o símbolo real do Jogador X (X ou Triângulo)
+            if (currentSymbolX === '▲') {
+                winMessage = `🎉 O TRIÂNGULO VENCEU! 👟 O GUILHERME VAI TER QUE LAVAR MEU TÊNIS!`;
+            } else {
+                winMessage = `🎉 Vitória do Símbolo X! O almoço será por conta do Gui !!!`;
+            }
         } else {
-            winMessage = `🏆 CÍRCULO VENCEU! GUI terá que fazer faxina em casa !`;
+            // Verifica o símbolo real do Jogador O (O ou Coração)
+            if (currentSymbolO === '♥') {
+                winMessage = `O CORAÇÃO VENCEU! 🎉 O GUILHERME VAI PAGAR UM SORVETE PRA MIM!`;
+            } else {
+                winMessage = `🏆 CÍRCULO VENCEU! GUI terá que fazer faxina em casa !`;
+            }
         }
 
         statusDisplay.innerHTML = winMessage;
@@ -93,25 +108,26 @@ function handleResultValidation() {
     handlePlayerChange();
 }
 
-// Troca o jogador atual e atualiza o status
 function handlePlayerChange() {
     currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
     statusDisplay.innerHTML = `Vez do ${currentPlayer}`;
 }
 
-// Reinicia o tabuleiro, mantendo os placares
 function handleRestartGame() {
     gameActive = true;
     currentPlayer = 'X';
     gameState = ["", "", "", "", "", "", "", "", ""];
-    statusDisplay.innerHTML = `Vez do X`;
+    statusDisplay.innerHTML = `Vez do ${currentSymbolX}`; // Mostra o símbolo atual do X
+    
     cells.forEach(cell => {
         cell.innerHTML = "";
         cell.style.color = '';
+        // Remove cores específicas dos símbolos
+        if (cell.classList.contains('x-win')) cell.classList.remove('x-win');
+        if (cell.classList.contains('o-win')) cell.classList.remove('o-win');
     });
 }
 
-// Atualiza o placar de vitórias
 function updateScore(winner) {
     if (winner === 'X') {
         scoreX++;
@@ -124,13 +140,11 @@ function updateScore(winner) {
 
 // --- Funções de Personalização ---
 
-// Atualiza a cor das linhas do tabuleiro
 function handleColorChange(event) {
     const newColor = event.target.value;
     document.documentElement.style.setProperty('--board-color', newColor);
 }
 
-// Atualiza os símbolos de X e O (e reinicia os placares para evitar confusão)
 function handleSymbolChange() {
     currentSymbolX = symbolXSelect.value;
     currentSymbolO = symbolOSelect.value;
@@ -141,7 +155,8 @@ function handleSymbolChange() {
     scoreXDisplay.innerHTML = `${currentSymbolX}: ${scoreX}`;
     scoreODisplay.innerHTML = `${currentSymbolO}: ${scoreO}`;
 
-    // Reinicia o jogo no tabuleiro
+    // Atualiza o status inicial e reinicia o tabuleiro
+    statusDisplay.innerHTML = `Vez do ${currentSymbolX}`;
     handleRestartGame();
 }
 
@@ -153,7 +168,9 @@ colorPicker.addEventListener('input', handleColorChange);
 symbolXSelect.addEventListener('change', handleSymbolChange);
 symbolOSelect.addEventListener('change', handleSymbolChange);
 
-// Configuração inicial da cor do CSS (para o caso de ser o valor padrão)
-document.documentElement.style.setProperty('--board-color', colorPicker.value);
+// Configuração inicial
+const defaultColor = colorPicker.value;
+document.documentElement.style.setProperty('--board-color', defaultColor);
 scoreXDisplay.innerHTML = `${currentSymbolX}: ${scoreX}`;
 scoreODisplay.innerHTML = `${currentSymbolO}: ${scoreO}`;
+statusDisplay.innerHTML = `Vez do ${currentSymbolX}`;
