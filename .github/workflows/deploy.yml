@@ -1,0 +1,48 @@
+# Arquivo: .github/workflows/deploy.yml
+
+name: Deploy Static Content to Pages
+
+on:
+  # Roda em pushes para a branch principal (main)
+  push:
+    branches: ["main"]
+
+  # Permite rodar manualmente a partir da aba Actions
+  workflow_dispatch:
+
+# Define as permissões necessárias para o GITHUB_TOKEN.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Permite apenas uma execução concorrente por branch
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # O job de construção/deploy
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      # Esta etapa cria o artefato (os arquivos que serão publicados).
+      # Ele pega todos os arquivos da raiz do repositório (HTML, CSS, JS).
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './'
+
+      # Esta etapa implanta o artefato. É aqui que o erro de timeout estava acontecendo.
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
