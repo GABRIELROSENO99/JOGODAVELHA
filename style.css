@@ -1,53 +1,107 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo da Velha Personalizado</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Jogo da Velha</h1>
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+    margin: 0;
+}
 
-        <div class="score-board">
-            <span id="score-x">X: 0</span>
-            <span id="score-o">O: 0</span>
-        </div>
-        
-        <div class="options">
-            <label for="symbol-select">Símbolo Jogador 1 (X):</label>
-            <select id="symbol-x-select">
-                <option value="X">X</option>
-                <option value="▲">Triângulo (▲)</option>
-            </select>
-            
-            <label for="symbol-select">Símbolo Jogador 2 (O):</label>
-            <select id="symbol-o-select">
-                <option value="O">O</option>
-                <option value="♥">Coração (♥)</option>
-            </select>
-            
-            <label for="color-picker">Cor das Linhas:</label>
-            <input type="color" id="color-picker" value="#3498db">
-        </div>
+.container {
+    text-align: center;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-        <div class="board" id="board">
-            <div class="cell" data-index="0"></div>
-            <div class="cell" data-index="1"></div>
-            <div class="cell" data-index="2"></div>
-            <div class="cell" data-index="3"></div>
-            <div class="cell" data-index="4"></div>
-            <div class="cell" data-index="5"></div>
-            <div class="cell" data-index="6"></div>
-            <div class="cell" data-index="7"></div>
-            <div class="cell" data-index="8"></div>
-        </div>
+h1 {
+    color: #333;
+    margin-bottom: 10px;
+}
 
-        <div id="status">Vez do X</div>
-        <button id="reset-button">Reiniciar Jogo</button>
-    </div>
+/* Placar de Pontuação */
+.score-board {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
 
-    <script src="script.js"></script>
-</body>
-</html>
+.score-board span {
+    margin: 0 15px;
+}
+
+/* Opções de Personalização */
+.options {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    font-size: 0.9em;
+}
+
+/* Tabuleiro (CRÍTICO: Define a grade 3x3 e a borda externa) */
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 0;
+    margin: 20px auto;
+    border: 3px solid var(--board-color, #3498db); /* Usa a cor padrão */
+}
+
+/* Células (CRÍTICO: Define o tamanho e as bordas internas) */
+.cell {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+    cursor: pointer;
+    box-sizing: border-box;
+    border: 1px solid var(--board-color, #3498db); /* Usa a cor padrão */
+    transition: background-color 0.2s;
+    user-select: none; /* Impede a seleção de texto */
+}
+
+.cell:hover {
+    background-color: #f0f0f0;
+}
+
+/* Remove a borda direita e inferior das células laterais e inferiores para um visual de Jogo da Velha */
+.cell[data-index="2"], .cell[data-index="5"], .cell[data-index="8"] { border-right: none; }
+.cell[data-index="6"], .cell[data-index="7"], .cell[data-index="8"] { border-bottom: none; }
+.cell[data-index="0"], .cell[data-index="1"], .cell[data-index="2"] { border-top: none; }
+.cell[data-index="0"], .cell[data-index="3"], .cell[data-index="6"] { border-left: none; }
+
+
+/* Mensagem de Status */
+#status {
+    margin: 15px 0;
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #2c3e50;
+    min-height: 20px; /* Garante espaço para a mensagem */
+}
+
+/* Botão de Reinício */
+#reset-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#reset-button:hover {
+    background-color: #27ae60;
+}
