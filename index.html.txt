@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Velha Personalizado</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Jogo da Velha</h1>
+
+        <div class="score-board">
+            <span id="score-x">X: 0</span>
+            <span id="score-o">O: 0</span>
+        </div>
+        
+        <div class="options">
+            <label for="symbol-select">Símbolo Jogador 1 (X):</label>
+            <select id="symbol-x-select">
+                <option value="X">X</option>
+                <option value="▲">Triângulo (▲)</option>
+            </select>
+            
+            <label for="symbol-select">Símbolo Jogador 2 (O):</label>
+            <select id="symbol-o-select">
+                <option value="O">O</option>
+                <option value="♥">Coração (♥)</option>
+            </select>
+            
+            <label for="color-picker">Cor das Linhas:</label>
+            <input type="color" id="color-picker" value="#3498db">
+        </div>
+
+        <div class="board" id="board">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+
+        <div id="status">Vez do X</div>
+        <button id="reset-button">Reiniciar Jogo</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
