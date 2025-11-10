@@ -1,91 +1,123 @@
+/* Importação de uma fonte moderna do Google Fonts (Opcional, mas recomendado) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+    /* Variáveis de cor para fácil alteração */
+    --background-dark: #1e1e1e;
+    --card-dark: #2c2c2c;
+    --text-light: #e0e0e0;
+    --primary-color: #00bcd4; /* Azul Ciano Vibrante */
+    --accent-color: #ff9800; /* Laranja de Destaque */
+}
+
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Poppins', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    /* Fundo suave e moderno */
-    background-color: #e0f7fa; 
+    background-color: var(--background-dark);
     margin: 0;
 }
 
 .container {
     text-align: center;
-    /* Visual de carta */
-    background: white; 
-    padding: 40px;
-    border-radius: 15px;
-    /* Sombra elegante */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); 
+    background: var(--card-dark);
+    padding: 45px;
+    border-radius: 12px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    color: var(--text-light);
+    width: 90%;
+    max-width: 400px; /* Limita o tamanho do container */
 }
 
 h1 {
-    color: #00796b; /* Verde-água escuro */
-    margin-bottom: 20px;
-    font-size: 2em;
+    color: var(--primary-color);
+    margin-bottom: 25px;
+    font-weight: 700;
 }
 
 /* Placar de Pontuação */
 .score-board {
-    margin-bottom: 25px;
-    font-size: 1.3em;
-    font-weight: bold;
-    color: #546e7a; /* Azul-cinzento */
+    margin-bottom: 30px;
+    font-size: 1.4em;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: #383838;
 }
 
 .score-board span {
-    margin: 0 20px;
+    margin: 0 25px;
+    transition: color 0.3s;
+}
+
+#score-x {
+    color: var(--primary-color);
+}
+#score-o {
+    color: var(--accent-color);
 }
 
 /* Opções de Personalização */
 .options {
     margin-bottom: 30px;
     padding: 15px;
-    border: 1px solid #cfd8dc;
     border-radius: 8px;
-    background-color: #f5f5f5;
+    background-color: #383838;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 15px;
     font-size: 0.9em;
+    color: var(--text-light);
 }
 
-.options label, .options select, .options input {
-    vertical-align: middle;
+.options select, .options input[type="color"] {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #555;
+    background-color: #1e1e1e;
+    color: var(--text-light);
 }
 
 /* --- Tabuleiro e Células --- */
 
-/* Tabuleiro (Container) */
 .board {
     display: grid;
     grid-template-columns: repeat(3, 100px);
     grid-template-rows: repeat(3, 100px);
     gap: 0;
     margin: 20px auto;
+    /* Borda externa sutil para enquadramento */
+    border: 1px solid #555; 
+    border-radius: 4px;
+    overflow: hidden; /* Garante que as bordas internas não ultrapassem */
 }
 
-/* Células (Espaços do Jogo da Velha) */
 .cell {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 3.5em; /* Aumento do tamanho do símbolo */
+    font-size: 4em;
     cursor: pointer;
     box-sizing: border-box;
-    transition: background-color 0.2s;
+    background-color: #444; /* Fundo escuro para as células */
+    transition: background-color 0.2s, transform 0.1s;
     user-select: none;
     
-    /* Borda Padrão (Manterá a estrutura do jogo) */
-    border-right: 3px solid var(--board-color, #0097a7);
-    border-bottom: 3px solid var(--board-color, #0097a7);
+    /* Borda mais espessa e com a cor customizada */
+    border-right: 4px solid var(--board-color, var(--primary-color));
+    border-bottom: 4px solid var(--board-color, var(--primary-color));
+
+    /* Cores iniciais dos símbolos para destaque */
+    color: var(--primary-color);
 }
 
 .cell:hover {
-    background-color: #eceff1; /* Destaque suave ao passar o mouse */
+    background-color: #555; 
 }
 
 /* 1. Remove a borda direita da última coluna (índices 2, 5, 8) */
@@ -102,30 +134,31 @@ h1 {
 
 #status {
     margin: 20px 0 15px;
-    font-size: 1.6em;
-    font-weight: bold;
-    color: #d32f2f; /* Vermelho vibrante para status */
-    min-height: 25px;
+    font-size: 1.7em;
+    font-weight: 700;
+    color: var(--accent-color);
+    min-height: 30px;
 }
 
 #reset-button {
-    padding: 12px 25px;
+    padding: 12px 30px;
     font-size: 1.1em;
     cursor: pointer;
-    background-color: #43a047; /* Verde vivo */
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--card-dark);
     border: none;
-    border-radius: 7px;
-    box-shadow: 0 4px #2e7d32;
+    border-radius: 8px;
+    box-shadow: 0 4px #0097a7;
     transition: background-color 0.1s, transform 0.1s;
+    font-weight: 600;
 }
 
 #reset-button:hover {
-    background-color: #388e3c;
+    background-color: #00bcd4;
 }
 
 #reset-button:active {
-    background-color: #2e7d32;
-    box-shadow: 0 2px #2e7d32;
+    background-color: #00796b;
+    box-shadow: 0 2px #00796b;
     transform: translateY(2px);
 }
